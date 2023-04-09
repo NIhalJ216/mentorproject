@@ -1,9 +1,10 @@
+import RoutePaths from './Routes/RoutePaths';
 import './Styles/App.scss';
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello world</h1>
+      <RoutePaths/>
     </div>
   );
 }
