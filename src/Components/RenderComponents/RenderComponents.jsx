@@ -1,4 +1,14 @@
-import { FormLabel, Grid, InputAdornment, MenuItem, TextField, Tooltip, Button, Typography } from '@mui/material';
+import {
+  FormLabel,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Tooltip,
+  Button,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { COMPONENTS } from '../../Utils/Constants';
 import { isArray } from '../../Utils/Utils';
 
@@ -85,11 +95,6 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
       isSecondDate = false
     } = metaData;
 
-    // const asterisk = () => (
-    //   <Typography variant="subtitle2" color="error">
-    //     *
-    //   </Typography>
-    // );
     switch (control) {
       case TEXT_FIELD:
       case SELECT_BOX:
@@ -196,6 +201,24 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
               </Button>
             </Tooltip>
           </Grid>
+        );
+      case ICON:
+        return (
+          <>
+            <Tooltip title={tooltipTitle || ''} placement={placement}>
+              <IconButton
+                onClick={() => handleClickIcon(key, ind)}
+                aria-label={tooltipTitle || ''}
+                style={{ ...groupStyle }}
+                color={color || 'inherit'}
+                disabled={isDisabled}
+                size={iconSize}
+              >
+                {iconName} <Typography variant="subtitle2">{iconTitle}</Typography>
+              </IconButton>
+            </Tooltip>
+            {label && <Typography variant="subtitle2">{label}</Typography>}
+          </>
         );
       default:
         return '';

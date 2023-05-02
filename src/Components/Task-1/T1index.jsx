@@ -1,20 +1,22 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import InnerNav from '../Nav/InnerNav';
 import SidebarNav from '../Nav/SidebarNav';
 import TopNav from '../Nav/TopNav';
-import AddClient from '../ClientPage/AddClient';
+import RoutePaths from '../../Routes/RoutePaths';
 
 function T1index() {
   return (
     <>
       <TopNav />
-      <Grid style={{ display: 'flex', alignItems: 'flex-start' }}>
-        <SidebarNav />
-        <Grid>
-          <InnerNav />
-          <Grid style={{ padding: '0.5rem' }}>
-            <AddClient />
+      <Grid container style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={0.8}>
+              <SidebarNav />
+            </Grid>
+            <Grid item xs={11.2} sx={{ padding: '0.5rem' }}>
+              <RoutePaths />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

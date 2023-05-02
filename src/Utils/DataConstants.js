@@ -12,3 +12,11 @@ export const CURRENCIES = [
   { id: 3, name: 'JPY' },
   { id: 4, name: 'AUD' }
 ];
+
+export const CLIENTS = [
+  { id: 0, name: 'Client-1' },
+  { id: 1, name: 'Client-2' },
+  { id: 2, name: 'Client-3' },
+  { id: 3, name: 'Client-4' },
+  { id: 4, name: 'Client-5' }
+];
