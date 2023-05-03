@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box, Grid } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
 import { COMPONENTS } from '../../Utils/Constants';
 import RenderComponents from '../RenderComponents/RenderComponents';
+import { CLIENT_DETAILS } from '../../Redux/Constants';
 import { ROUTES } from '../../Routes/Paths';
 import { BILLING_METHOD, CURRENCIES } from '../../Utils/DataConstants';
 
 function AddClient() {
   const navigate = useNavigate();
+  const clientData = useSelector((state) => state.ClientDetails?.clientInfo);
+  const dispatch = useDispatch();
   const { TEXT_FIELD, SELECT_BOX, BUTTON, TYPOGRAPHY, ICON } = COMPONENTS;
   const { CLIENTS } = ROUTES;
   const [payload, setPayload] = useState({
@@ -23,6 +27,8 @@ function AddClient() {
   });
 
   const updatePayload = (pairs) => setPayload((prevPayload) => ({ ...prevPayload, ...pairs }));
+
+  const handleActionDispatch = (type, data = []) => dispatch({ type, data });
 
   const clientLabels = [
     {
@@ -184,7 +190,7 @@ function AddClient() {
       control: BUTTON,
       // groupStyle: { marginRight: '1rem' },
       btnTitle: 'Submit',
-      handleClickButton: () => console.log('SUbmit', payload),
+      handleClickButton: () => handleActionDispatch(CLIENT_DETAILS, payload),
       columnWidth: 0.8
     },
     {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import { COMPONENTS } from '../../Utils/Constants';
 import { ROUTES } from '../../Routes/Paths';
@@ -8,9 +9,10 @@ import RenderComponents from '../RenderComponents/RenderComponents';
 
 function ClientGrid() {
   const navigate = useNavigate();
+  const clients = useSelector((state) => state.ClientDetails?.clientInfo);
   const { SELECT_BOX, BUTTON } = COMPONENTS;
   const { CLIENTS, ADD_CLIENT } = ROUTES;
-
+  console.log('Clients Data', clients);
   const topComponents = [
     {
       control: SELECT_BOX,
