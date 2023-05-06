@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Drawer, Button, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mui/material';
+import { Box, Collapse, List, ListItemButton, ListItemText } from '@mui/material';
+import './HoverNav.scss';
 
-function HoverNav({ openDrawer, handleDrawer }) {
+function HoverNav({ hover }) {
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
-
   return (
-    <Drawer open={openDrawer} onClose={handleDrawer} style={{ zIndex: '1' }}>
+    <Box className={hover ? 'sideBar' : 'closeSidebar'}>
       <List component="nav">
         <ListItemButton onClick={handleClick}>
           <ListItemText primary="Time Logs" />
@@ -43,7 +43,7 @@ function HoverNav({ openDrawer, handleDrawer }) {
           </List>
         </Collapse>
       </List>
-    </Drawer>
+    </Box>
   );
 }
 

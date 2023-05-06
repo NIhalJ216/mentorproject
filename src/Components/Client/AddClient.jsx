@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Box, Grid } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,7 +12,6 @@ import { BILLING_METHOD, CURRENCIES } from '../../Utils/DataConstants';
 
 function AddClient() {
   const navigate = useNavigate();
-  const clientData = useSelector((state) => state.ClientDetails?.clientInfo);
   const dispatch = useDispatch();
   const { TEXT_FIELD, SELECT_BOX, BUTTON, TYPOGRAPHY, ICON } = COMPONENTS;
   const { CLIENTS } = ROUTES;
@@ -67,7 +66,7 @@ function AddClient() {
       },
       key: 'billingMethodLabel',
       label: 'Billing Method',
-      columnWidth: 3
+      columnWidth: 3.5
     }
   ];
 
@@ -128,7 +127,7 @@ function AddClient() {
       key: 'clientName',
       variant: 'standard',
       label: 'Client',
-      columnWidth: 3
+      columnWidth: 6
     },
     {
       control: SELECT_BOX,
@@ -139,7 +138,7 @@ function AddClient() {
       label: 'currency',
       options: CURRENCIES,
       isSelecteAllAllow: false,
-      columnWidth: 3
+      columnWidth: 6
     },
     {
       control: SELECT_BOX,
@@ -150,7 +149,7 @@ function AddClient() {
       label: 'Billing Method',
       options: BILLING_METHOD,
       isSelecteAllAllow: false,
-      columnWidth: 3
+      columnWidth: 6
     }
   ];
 
@@ -160,28 +159,28 @@ function AddClient() {
       key: 'emailId',
       variant: 'standard',
       label: 'EmailId',
-      columnWidth: 3
+      columnWidth: 6
     },
     {
       control: TEXT_FIELD,
       key: 'firstName',
       variant: 'standard',
       label: 'First Name',
-      columnWidth: 3
+      columnWidth: 6
     },
     {
       control: TEXT_FIELD,
       key: 'lastName',
       variant: 'standard',
       label: 'Last Name',
-      columnWidth: 3
+      columnWidth: 6
     },
     {
       control: TEXT_FIELD,
       key: 'phone',
       variant: 'standard',
       label: 'Phone',
-      columnWidth: 3
+      columnWidth: 6
     }
   ];
 
@@ -206,7 +205,6 @@ function AddClient() {
     {
       control: ICON,
       iconName: <ArrowBackIosIcon />,
-      // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
       color: 'primary',
       handleClickIcon: () => navigate(CLIENTS),
       columnWidth: 0.5
@@ -225,7 +223,7 @@ function AddClient() {
     {
       control: ICON,
       iconName: <CloseIcon />,
-      groupStyle: { marginLeft: '70rem' },
+      groupStyle: { position: 'absolute', right: '1rem' },
       color: 'error',
       handleClickIcon: () => navigate(CLIENTS),
       columnWidth: 0.5
@@ -233,14 +231,11 @@ function AddClient() {
   ];
 
   const handleChangeData = (key, val, ind) => {
-    console.log('KEYVAL', key, val, ind);
     if (key) {
       const updateFields = { [key]: val };
       updatePayload({ ...updateFields });
     }
   };
-
-  console.log('paylodsa', payload);
 
   return (
     <Grid container spacing={2}>
@@ -330,6 +325,9 @@ function AddClient() {
           alignItems: 'center',
           padding: '1rem',
           backgroundColor: '#f9fafc',
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
           borderTop: '1px solid #e9e9e9'
         }}
       >

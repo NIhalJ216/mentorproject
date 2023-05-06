@@ -1,13 +1,12 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import dashboard from '../../Assets/dashboard.jpg';
 
 function Dashboard() {
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography variant="h4" align="center">
-          Dashboard
-        </Typography>
+      <Grid item xs={12} mt={1}>
+        <img src={dashboard} alt="dashboard" width="100%" height="100%" />
       </Grid>
     </Grid>
   );

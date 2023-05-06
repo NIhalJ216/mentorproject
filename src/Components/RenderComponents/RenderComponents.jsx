@@ -61,6 +61,7 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
       isRequired = false,
       handleBlur,
       endAdornmentData,
+      endAdornmentIcon,
       isMultiline = false,
       textRows,
       tooltipTitle,
@@ -128,7 +129,8 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <span style={{ fontSize: '0.8rem' }}>{endAdornmentData}</span>
+                      {endAdornmentData && <span style={{ fontSize: '0.8rem' }}>{endAdornmentData}</span>}
+                      {endAdornmentIcon && <span>{endAdornmentIcon}</span>}
                     </InputAdornment>
                   )
                 }}
@@ -161,7 +163,7 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
         return (
           <Grid item xs={12} sm={columnWidth} style={{ ...groupStyle }} key={`${key}-${ind}`}>
             <Grid style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Typography variant="subtitle2" style={{ ...labelStyle }}>
+              <Typography variant="subtitle2" style={{ ...labelStyle, fontSize: '1rem' }}>
                 {label || ''}
               </Typography>
               {isRequired && (
@@ -170,9 +172,6 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
                 </Typography>
               )}
             </Grid>
-            {/* <Typography variant="subtitle2" style={{ color: '#637381', ...payloadStyle }}>
-              {(payload && payload[key]) || ''}
-            </Typography> */}
           </Grid>
         );
       case BUTTON:
