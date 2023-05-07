@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { COMPONENTS } from '../../Utils/Constants';
 import { ROUTES } from '../../Routes/Paths';
+import { getApiData } from '../../Services/TestService';
 import NoDataFound from '../NoDataFound/NoDataFound';
 import RenderComponents from '../RenderComponents/RenderComponents';
 
@@ -34,6 +35,16 @@ function ClientGrid() {
       columnWidth: 1.5
     }
   ];
+
+  const getPOSTDATA = async () => {
+    const res = await getApiData();
+    console.log('RESPONCE', res);
+  };
+
+  useEffect(() => {
+    getPOSTDATA();
+  }, []);
+
   return (
     <Grid container spacing={2}>
       <Grid
