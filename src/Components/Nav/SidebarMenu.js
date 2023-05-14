@@ -8,7 +8,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PieChartOutlineIcon from '@mui/icons-material/PieChartOutline';
 import { ROUTES } from '../../Routes/Paths';
 
-const { CLIENTS } = ROUTES;
+const { TIMESHEETS, DASHBOARD } = ROUTES;
 
 const iconStyles = {
   color: '#ffebee',
@@ -19,41 +19,41 @@ export const SIDEBAR_MENU = [
   {
     title: 'Services',
     icon: <GrainIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   },
   {
     title: 'Home',
     icon: <HomeIcon style={iconStyles} />,
-    url: CLIENTS
+    url: DASHBOARD
   },
   {
     title: 'Self-service',
     icon: <PermIdentityIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   },
   {
     title: 'Attendance',
     icon: <EventAvailableIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   },
   {
     title: 'Time Tracker',
     icon: <AccessTimeIcon style={iconStyles} />,
-    url: CLIENTS
+    url: TIMESHEETS
   },
   {
     title: 'Announcements',
     icon: <CampaignIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   },
   {
     title: 'More',
     icon: <MoreHorizIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   },
   {
     title: 'Reports',
     icon: <PieChartOutlineIcon style={iconStyles} />,
-    url: CLIENTS
+    url: ''
   }
 ];

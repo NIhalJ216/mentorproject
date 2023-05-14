@@ -13,14 +13,14 @@ function T1index() {
   return (
     <>
       <TopNav />
-      <HoverNav hover={hover} />
+      <HoverNav hover={hover} setHover={setHover} />
       <Grid container style={{ display: 'flex', alignItems: 'flex-start' }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={0.8}>
               <SidebarNav handleHover={handleHover} />
             </Grid>
-            <Grid item xs={11.2} sx={{ padding: '0.5rem' }}>
+            <Grid item xs={11.2} sx={{ padding: '0.5rem', width: '100%' }}>
               <RoutePaths />
             </Grid>
           </Grid>

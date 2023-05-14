@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_RESPONSE_CODES } from './Constants';
 
+const baseUrl = 'https://app-timesheetsmgmtproject-eastus-001.azurewebsites.net/api/';
 // const handleSuccessResponse = (res) => {
 //   const { SUCCESS } = API_RESPONSE_CODES;
 //   if (res.status === SUCCESS) {
@@ -21,12 +22,37 @@ const handleErrorResponse = (err) => {
     console.log('ERROR', err);
     return err;
   }
+  return err;
 };
 
 export const getData = (url) => {
   const headerObj = '';
   return axios
-    .get(url)
+    .get(`${baseUrl}${url}`)
+    .then((res) => handleSuccessResponse(res))
+    .catch((err) => handleErrorResponse(err));
+};
+
+export const postData = (url, body) => {
+  const headerObj = '';
+  return axios
+    .post(`${baseUrl}${url}`, body)
+    .then((res) => handleSuccessResponse(res))
+    .catch((err) => handleErrorResponse(err));
+};
+
+export const putData = (url, body) => {
+  const headerObj = '';
+  return axios
+    .put(`${baseUrl}${url}`, body)
+    .then((res) => handleSuccessResponse(res))
+    .catch((err) => handleErrorResponse(err));
+};
+
+export const deleteData = (url, body) => {
+  const headerObj = '';
+  return axios
+    .delete(`${baseUrl}${url}`, body)
     .then((res) => handleSuccessResponse(res))
     .catch((err) => handleErrorResponse(err));
 };

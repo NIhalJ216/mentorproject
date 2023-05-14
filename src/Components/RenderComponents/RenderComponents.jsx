@@ -136,7 +136,7 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
                 }}
                 multiline={isMultiline}
                 rows={textRows}
-                InputLabelProps={{ shrink: (payload && payload[key]) || false }}
+                // InputLabelProps={{ shrink: (payload && payload[key]) || false }}
               >
                 {isEmptyOptionAllowed && <MenuItem key={key} value="" />}
                 {isSelecteAllAllow && (
@@ -146,12 +146,7 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
                 )}
                 {isArray(options) &&
                   options.map((item) => (
-                    <MenuItem
-                      style={{ fontSize: '0.8rem', fontStyle: item.isOnLeave ? 'italic' : '' }}
-                      key={item.id}
-                      disabled={item.isDisabled}
-                      value={item.id.toString()}
-                    >
+                    <MenuItem style={{ fontSize: '0.8rem' }} key={item.id} disabled={item.isDisabled} value={item.id}>
                       {item[displayKey]}
                     </MenuItem>
                   ))}

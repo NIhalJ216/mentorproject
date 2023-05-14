@@ -1,57 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import AddTaskIcon from '@mui/icons-material/AddTask';
 import { COMPONENTS } from '../../Utils/Constants';
-import { CLIENTS_DATA } from '../../Utils/DataConstants';
 import { ROUTES } from '../../Routes/Paths';
-import { getApiData } from '../../Services/TestService';
-import { getClientData, deleteClientData } from '../../Services/clientServices';
 import MuiTable from '../MuiTable/MuiTable';
-import NoDataFound from '../NoDataFound/NoDataFound';
 import RenderComponents from '../RenderComponents/RenderComponents';
+import { getProjectData, deleteProjectData } from '../../Services/projectServices';
+import './ProjectGrid.scss';
 
-function ClientGrid() {
-  // const clients = useSelector((state) => state.ClientDetails?.clientInfo);
+function ProjectGrid() {
   const navigate = useNavigate();
-  const [clientData, setClientData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
+  const { ADD_PROJECT } = ROUTES;
   const { SELECT_BOX, BUTTON, ICON } = COMPONENTS;
-  const { ADD_CLIENT } = ROUTES;
+
   const topComponents = [
     {
       control: SELECT_BOX,
       select: true,
       variant: 'standard',
       groupStyle: { paddingBottom: '0.5rem', marginBottom: '1rem' },
-      key: 'clients',
-      label: 'Clients',
-      options: CLIENTS_DATA,
+      key: 'projects',
+      label: 'Projects',
+      options: [],
       isSelecteAllAllow: false,
       columnWidth: 2
     },
     {
+      control: ICON,
+      key: 'user',
+      iconTitle: 'User',
+      groupStyle: { position: 'absolute', right: '21rem', marginBottom: '1rem' },
+      columnWidth: 1
+    },
+    {
+      control: ICON,
+      key: 'department',
+      iconTitle: 'Department',
+      groupStyle: { position: 'absolute', right: '15rem', marginBottom: '1rem' },
+      columnWidth: 1
+    },
+    {
       control: BUTTON,
       groupStyle: { position: 'absolute', right: '6rem', marginBottom: '1rem' },
-      btnTitle: 'Add Client',
-      handleClickButton: () => navigate(ADD_CLIENT),
+      btnTitle: 'Add Project',
+      handleClickButton: () => navigate(ADD_PROJECT),
       startIcon: <AddIcon />,
       columnWidth: 1.5
     }
   ];
 
   const columnData = [
-    { field: 'clientId', headerName: 'Id', width: 70 },
-    { field: 'clientName', headerName: 'Client name', width: 130 },
-    { field: 'firstName', headerName: 'First Name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    { field: 'currency', headerName: 'Currency', width: 100 },
-    { field: 'billingMethod', headerName: 'Billing Method', width: 130 },
-    { field: 'mobile', headerName: 'Mobile', width: 150 },
-    { field: 'phone', headerName: 'Phone', width: 150 },
-    { field: 'fax', headerName: 'Fax', width: 150 },
+    // { field: 'clientId', headerName: 'Id', width: 70 },
+    { field: 'projectName', headerName: 'Project Name', width: 300 },
+    { field: 'estimatedHours', headerName: 'Estimated Hours', width: 180 },
+    { field: 'loggedHours', headerName: 'Logged Hours', width: 180 },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 100,
+      renderCell: () => (
+        <div style={{ cursor: 'pointer' }}>
+          <RenderComponents
+            metaData={{
+              control: ICON,
+              iconName: <AddTaskIcon />,
+              tooltipTitle: 'status'
+              // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
+              // handleClickIcon: () => handleEdit(params.id)
+            }}
+          />
+        </div>
+      )
+    },
+    { field: 'jobs', headerName: 'Jobs', width: 80 },
     {
       field: 'edit',
       headerName: '',
@@ -91,36 +117,38 @@ function ClientGrid() {
   ];
 
   const handleEdit = (data) => {
-    console.log('navigateData', data);
-    const tableData = clientData.find((itm) => itm.clientId === data);
+    console.log('EDIT', data);
+    const tableData = projectData.find((itm) => itm.projectId === data);
     console.log('tableData', tableData);
-    navigate(ADD_CLIENT, { state: tableData });
+    navigate(ADD_PROJECT, { state: tableData });
   };
 
   const handleDelete = async (data) => {
-    const res = await deleteClientData(data);
+    console.log('DELETE', data);
+    const res = await deleteProjectData(data);
     if (res?.data.isSuccessful) {
-      const tableData = clientData.filter((itm) => itm.clientId !== data);
-      setClientData(tableData);
+      const tableData = projectData.filter((itm) => itm.projectId !== data);
+      setProjectData(tableData);
+      alert('Project deleted successfully.');
     }
   };
 
   const getRowId = (data) => {
-    console.log('rowID', data.clientId);
-    return data.clientId;
+    console.log('rowID', data.projectId);
+    return data.projectId;
   };
 
-  const getPOSTDATA = async () => {
-    const res = await getClientData();
+  const getProjectListData = async () => {
+    const res = await getProjectData();
     console.log('RESPONCE', res?.data);
     if (res.data.isSuccessful) {
-      setClientData(res.data.data);
+      setProjectData(res.data.data);
     }
   };
-  console.log('clientData', clientData);
+  console.log('projectData', projectData);
 
   useEffect(() => {
-    getPOSTDATA();
+    getProjectListData();
   }, []);
 
   return (
@@ -146,13 +174,10 @@ function ClientGrid() {
         ))}
       </Grid>
       <Grid item xs={12} style={{ height: '100vh ', marginTop: '5rem', backgroundColor: '#ffffff' }}>
-        <MuiTable columnsData={columnData} rowsData={clientData} getRowId={getRowId} />
+        <MuiTable columnsData={columnData} rowsData={projectData} getRowId={getRowId} />
       </Grid>
-      {/* <Grid item xs={12} style={{ backgroundColor: '#ffffff', height: '100vh ' }}>
-        <NoDataFound />
-      </Grid> */}
     </Grid>
   );
 }
 
-export default ClientGrid;
+export default ProjectGrid;

@@ -1,14 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ROUTES } from '../../Routes/Paths';
 import { COMPONENTS } from '../../Utils/Constants';
 import zoho from '../../Assets/zoho.png';
 import RenderComponents from '../RenderComponents/RenderComponents';
 
 function TopNav() {
-  const { TEXT_FIELD } = COMPONENTS;
+  const { TEXT_FIELD, ICON } = COMPONENTS;
+  const iconColor = grey[800];
+  const icons = [
+    {
+      control: ICON,
+      iconName: <AddCircleOutlineIcon />,
+      tooltipTitle: 'Quick Add',
+      // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
+      color: iconColor,
+      handleClickIcon: () => alert('ADD')
+    },
+    {
+      control: ICON,
+      iconName: <NotificationsNoneIcon />,
+      tooltipTitle: 'Notifications',
+      // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
+      color: iconColor,
+      handleClickIcon: () => alert('ADD')
+    },
+    {
+      control: ICON,
+      iconName: <AccountCircleIcon />,
+      tooltipTitle: 'Profile',
+      // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
+      color: iconColor,
+      handleClickIcon: () => alert('ADD')
+    }
+  ];
   return (
     <AppBar
       elevation={0}
@@ -37,6 +68,9 @@ function TopNav() {
               columnWidth: 3
             }}
           />
+          {icons?.map((comp, ind) => (
+            <RenderComponents key={ind} metaData={comp} ind={ind} />
+          ))}
         </Toolbar>
       </Container>
     </AppBar>
