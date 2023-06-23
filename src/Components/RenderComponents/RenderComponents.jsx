@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import {
   FormLabel,
   Grid,
@@ -7,12 +8,21 @@ import {
   Tooltip,
   Button,
   Typography,
-  IconButton
+  IconButton,
+  FormHelperText,
+  Checkbox,
+  FormControlLabel,
+  Chip,
+  Box,
+  OutlinedInput,
+  Select,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import { COMPONENTS } from '../../Utils/Constants';
 import { isArray } from '../../Utils/Utils';
 
-const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
+const RenderComponents = ({ payload, metaData, ind, handleChange, deleteMltSlctOptn }) => {
   const {
     TEXT_FIELD,
     SELECT_BOX,
@@ -154,6 +164,95 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
             </Tooltip>
           </Grid>
         );
+      case MULTI_SELECT_BOX:
+        return (
+          <Grid item xs={12} sm={columnWidth} style={{ ...groupStyle }} key={`${key}-${ind}`}>
+            <FormControl style={{ width: '100%' }}>
+              <InputLabel error={isError} style={labelStyle} id={`${key}-chip-label`} required={isRequired}>
+                {(label && [label]) || ''}
+              </InputLabel>
+              <Select
+                labelId={`${key}-chip-label`}
+                id={`${key}-chip-id`}
+                multiple={multiple}
+                value={(payload && payload[key]) || []}
+                onChange={(e) => handleChange(key, e.target.value, ind)}
+                input={<OutlinedInput id={`${key}-select-chip-id`} label={[label]} />}
+                error={isError}
+                helperText={isError && helperText}
+                required={isRequired}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {(isArray(selected) && (
+                      <>
+                        {selected?.slice(0, maxMultipleOptions).map((item) => (
+                          <Chip
+                            key={item.name}
+                            label={item.name}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onDelete={(e) => deleteMltSlctOptn(key, item.id, ind)}
+                          />
+                        ))}
+                        {maxMultipleOptions < selected.length && (
+                          <span style={{ marginTop: '0.5rem' }}>+{selected.length - maxMultipleOptions} more</span>
+                        )}
+                      </>
+                    )) ||
+                      (selected && (
+                        <Chip
+                          key={selected.name}
+                          label={selected.name}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onDelete={(e) => deleteMltSlctOptn(key, selected.id, ind)}
+                        />
+                      )) || <></>}
+                  </Box>
+                )}
+                MenuProps={menuProps}
+                style={controlStyle}
+                disabled={isDisabled}
+              >
+                {selectAll && (
+                  <MenuItem
+                    key={`${ind}-all`}
+                    value={(payload[key] && options.length === payload[key].length && 'deselectAll') || 'selectAll'}
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    {(payload[key] && options.length === payload[key].length && 'Deselect All') || 'Select All'}
+                  </MenuItem>
+                )}
+                {options?.map((item, ind) => (
+                  <MenuItem
+                    key={`${item}-${ind}`}
+                    value={item}
+                    style={{ fontSize: '0.8rem', height: '2rem', fontStyle: item.isOnLeave ? 'italic' : '' }}
+                  >
+                    {(multiple && (
+                      <FormControlLabel
+                        label={item.name}
+                        htmlFor={item.id}
+                        labelPlacement="end"
+                        control={
+                          <Checkbox
+                            inputid={item?.id}
+                            checked={
+                              (payload &&
+                                isArray(payload[key]) &&
+                                payload[key].map((item) => item?.id).includes(item?.id)) ||
+                              false
+                            }
+                          />
+                        }
+                      />
+                    )) ||
+                      item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {isError && <FormHelperText error>{helperText}</FormHelperText>}
+            </FormControl>
+          </Grid>
+        );
       case TYPOGRAPHY:
         return (
           <Grid item xs={12} sm={columnWidth} style={{ ...groupStyle }} key={`${key}-${ind}`}>
@@ -190,6 +289,7 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
                 onClick={handleClickButton}
                 color={color}
                 startIcon={startIcon}
+                sx={{ textTransform: 'none' }}
               >
                 {btnTitle}
               </Button>
@@ -214,6 +314,8 @@ const RenderComponents = ({ payload, metaData, ind, handleChange }) => {
             {label && <Typography variant="subtitle2">{label}</Typography>}
           </>
         );
+      case NONE:
+        return <Grid item xs={12} sm={columnWidth} style={{ ...groupStyle }} key={`${key}-${ind}`} />;
       default:
         return '';
     }

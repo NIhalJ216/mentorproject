@@ -1,1 +1,6 @@
 export const CLIENT_DETAILS = 'CLIENT_DETAILS';
+
+export const IS_DATA_LOADING = 'IS_DATA_LOADING';
+
+export const CLIENT_NAMES = 'CLIENT_NAMES';
+export const PROJECT_NAMES = 'PROJECT_NAMES';

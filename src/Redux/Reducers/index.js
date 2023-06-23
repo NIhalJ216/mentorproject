@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import ClientDetails from './ClientReducer';
+import MasterDataReducer from './MasterDataReducer';
 
 export default combineReducers({
-  ClientDetails
+  ClientDetails,
+  MasterDataReducer
 });

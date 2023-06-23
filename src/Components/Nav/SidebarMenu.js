@@ -8,7 +8,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PieChartOutlineIcon from '@mui/icons-material/PieChartOutline';
 import { ROUTES } from '../../Routes/Paths';
 
-const { TIMESHEETS, DASHBOARD } = ROUTES;
+const { TIMESHEETS, DASHBOARD, CLIENTS, PROJECTS, ADD_CLIENT, ADD_PROJECT } = ROUTES;
 
 const iconStyles = {
   color: '#ffebee',
@@ -39,7 +39,8 @@ export const SIDEBAR_MENU = [
   {
     title: 'Time Tracker',
     icon: <AccessTimeIcon style={iconStyles} />,
-    url: TIMESHEETS
+    url: TIMESHEETS,
+    childUrl: [CLIENTS, PROJECTS, ADD_CLIENT, ADD_PROJECT]
   },
   {
     title: 'Announcements',

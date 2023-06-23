@@ -6,23 +6,25 @@ import CloseIcon from '@mui/icons-material/Close';
 import RenderComponents from '../RenderComponents/RenderComponents';
 import { CLIENTS_DATA, PROJECT_HEAD_DATA, PROJECT_MANAGER_DATA, USERS_DATA } from '../../Utils/DataConstants';
 import { COMPONENTS } from '../../Utils/Constants';
+import { isArray } from '../../Utils/Utils';
 import { ROUTES } from '../../Routes/Paths';
 import { addProjectData, updateProjectData } from '../../Services/projectServices';
 
 function AddProject() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { TEXT_FIELD, SELECT_BOX, BUTTON, TYPOGRAPHY, ICON } = COMPONENTS;
+  const { TEXT_FIELD, SELECT_BOX, BUTTON, TYPOGRAPHY, ICON, NONE, MULTI_SELECT_BOX } = COMPONENTS;
   const { PROJECTS } = ROUTES;
   const [isUpdate, setIsUpdate] = useState(false);
   const [emptyPayload, setEmptyPayload] = useState({
     projectName: '',
-    clientName: '',
+    clientId: 0,
     projectCost: '',
-    projectHead: '',
+    projectHeadId: 0,
     rate: '',
-    projectManager: '',
-    projectUsers: '',
+    projectManagerId: 0,
+    // projectUserIds: [],
+    // projectUserId: 0,
     description: '',
     isActive: true,
     isDeleted: false,
@@ -46,12 +48,12 @@ function AddProject() {
     {
       control: TYPOGRAPHY,
       groupStyle: {
-        height: '3rem',
+        height: '2rem',
         display: 'flex',
         justifyContent: 'flex-start'
       },
-      key: 'addClientLabel',
-      label: 'Add Client',
+      key: 'addprojectLabel',
+      label: isUpdate ? 'Edit Project' : 'Add Project',
       columnWidth: 1
     },
     {
@@ -64,11 +66,11 @@ function AddProject() {
     }
   ];
 
-  const projectLabels = [
+  const projectInputs = [
     {
       control: TYPOGRAPHY,
       groupStyle: {
-        height: '3rem',
+        height: '2rem',
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'end'
@@ -76,178 +78,209 @@ function AddProject() {
       isRequired: true,
       key: 'projectLabel',
       label: 'Project Name',
+      columnWidth: 3
+    },
+    {
+      control: TEXT_FIELD,
+      key: 'projectName',
+      variant: 'standard',
+      label: '',
+      groupStyle: { height: '3rem' },
       columnWidth: 5
+    },
+    {
+      control: NONE,
+      // groupStyle: { marginBottom: '0.5rem' },
+      columnWidth: 4
     },
     {
       control: TYPOGRAPHY,
       groupStyle: {
-        height: '3rem',
+        height: '2rem',
         display: 'flex',
         justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '0.5rem'
+        alignItems: 'end'
+        // marginTop: '0.5rem'
       },
       key: 'clientName',
       label: 'Client Name',
       columnWidth: 3
     },
     {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '0.8rem'
-      },
-      key: 'projectCost',
-      label: 'Project Cost',
-      columnWidth: 3.5
-    },
-    {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '1rem'
-      },
-      key: 'projectHead',
-      label: 'Project Head',
-      columnWidth: 3.5
-    },
-    {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '0.8rem'
-      },
-      key: 'rate',
-      label: 'Rate',
-      columnWidth: 5
-    },
-    {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '0.8rem'
-      },
-      key: 'projectManager',
-      label: 'Project Manager',
-      columnWidth: 5
-    },
-    {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '0.8rem'
-      },
-      key: 'projectUsers',
-      label: 'Project Users',
-      columnWidth: 3.5
-    },
-    {
-      control: TYPOGRAPHY,
-      groupStyle: {
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'end',
-        marginTop: '2rem'
-      },
-      key: 'description',
-      label: 'Description',
-      columnWidth: 3.5
-    }
-  ];
-
-  const projectInputs = [
-    {
-      control: TEXT_FIELD,
-      key: 'projectName',
-      variant: 'standard',
-      label: 'Project Name',
-      columnWidth: 6
-    },
-    {
       control: SELECT_BOX,
       select: true,
       variant: 'standard',
-      groupStyle: { marginTop: '1rem' },
-      key: 'clientName',
-      label: 'Client Name',
+      groupStyle: { height: '3rem' },
+      key: 'clientId',
+      label: '',
       options: CLIENTS_DATA,
       isSelecteAllAllow: false,
-      columnWidth: 6
+      columnWidth: 5
+    },
+    {
+      control: NONE,
+      // groupStyle: { marginBottom: '0.5rem' },
+      columnWidth: 4
+    },
+    {
+      control: TYPOGRAPHY,
+      groupStyle: {
+        height: '2rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'end'
+        // marginTop: '0.8rem'
+      },
+      key: 'projectCost',
+      label: 'Project Cost',
+      columnWidth: 3
     },
     {
       control: TEXT_FIELD,
-      groupStyle: { marginTop: '1rem' },
+      groupStyle: { height: '3rem' },
       key: 'projectCost',
       variant: 'standard',
-      label: 'Project Cost',
-      columnWidth: 6
+      label: '',
+      columnWidth: 5
     },
     {
-      control: SELECT_BOX,
-      select: true,
-      variant: 'standard',
-      groupStyle: { marginTop: '1rem' },
+      control: NONE,
+      // groupStyle: { marginBottom: '0.5rem' },
+      columnWidth: 4
+    },
+    {
+      control: TYPOGRAPHY,
+      groupStyle: {
+        height: '2rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'end'
+        // marginTop: '1rem'
+      },
       key: 'projectHead',
       label: 'Project Head',
+      columnWidth: 3
+    },
+    {
+      control: SELECT_BOX,
+      select: true,
+      variant: 'standard',
+      groupStyle: { height: '3rem' },
+      key: 'projectHeadId',
+      label: '',
       options: PROJECT_HEAD_DATA,
       isSelecteAllAllow: false,
-      columnWidth: 6
+      columnWidth: 3
+    },
+    {
+      control: TYPOGRAPHY,
+      groupStyle: {
+        height: '2rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'end',
+        // marginTop: '0.8rem',
+        marginLeft: '1rem'
+      },
+      key: 'rate',
+      label: 'Rate',
+      columnWidth: 0.2
     },
     {
       control: TEXT_FIELD,
-      groupStyle: { marginTop: '1rem' },
+      groupStyle: { marginLeft: '2rem', height: '3rem' },
       key: 'rate',
       variant: 'standard',
-      label: 'Rate',
-      columnWidth: 6
+      label: '',
+      endAdornmentData: 'RPH',
+      columnWidth: 1.3
     },
     {
-      control: SELECT_BOX,
-      select: true,
-      variant: 'standard',
-      groupStyle: { marginTop: '1rem' },
+      control: NONE,
+      // groupStyle: { marginBottom: '0.5rem' },
+      columnWidth: 3
+    },
+    {
+      control: TYPOGRAPHY,
+      groupStyle: {
+        height: '2rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'end'
+        // marginTop: '0.8rem'
+      },
       key: 'projectManager',
       label: 'Project Manager',
-      options: PROJECT_MANAGER_DATA,
-      isSelecteAllAllow: false,
-      columnWidth: 6
+      columnWidth: 3
     },
     {
       control: SELECT_BOX,
       select: true,
       variant: 'standard',
-      groupStyle: { marginTop: '1rem' },
-      key: 'projectUsers',
-      label: 'Project Users',
-      options: USERS_DATA,
+      groupStyle: { height: '3rem' },
+      key: 'projectManagerId',
+      label: '',
+      options: PROJECT_MANAGER_DATA,
       isSelecteAllAllow: false,
-      columnWidth: 6
+      columnWidth: 5
+    },
+    {
+      control: NONE,
+      // groupStyle: { marginBottom: '0.5rem' },
+      columnWidth: 4
+    },
+    // {
+    //   control: TYPOGRAPHY,
+    //   groupStyle: {
+    //     height: '2rem',
+    //     display: 'flex',
+    //     justifyContent: 'flex-start',
+    //     alignItems: 'end'
+    //     // marginTop: '0.8rem'
+    //   },
+    //   key: 'projectUsers',
+    //   label: 'Project Users',
+    //   columnWidth: 3
+    // },
+    // {
+    // control: MULTI_SELECT_BOX,
+    //   control: SELECT_BOX,
+    //   select: true,
+    //   variant: 'standard',
+    //   groupStyle: { height: '3rem' },
+    //   key: 'projectUserId',
+    //   label: '',
+    //   options: USERS_DATA,
+    //   isSelecteAllAllow: false,
+    //   columnWidth: 5
+    // },
+    // {
+    //   control: NONE,
+    //   // groupStyle: { marginBottom: '0.5rem' },
+    //   columnWidth: 4
+    // },
+    {
+      control: TYPOGRAPHY,
+      groupStyle: {
+        height: '2rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'end'
+        // marginTop: '2rem'
+      },
+      key: 'description',
+      label: 'Description',
+      columnWidth: 3
     },
     {
       control: TEXT_FIELD,
-      groupStyle: { marginTop: '1rem' },
+      groupStyle: { height: '3rem' },
       key: 'description',
-      label: 'Description',
+      label: '',
       variant: 'standard',
       isMultiline: true,
       textRows: 4,
-      columnWidth: 6
+      columnWidth: 5
     }
   ];
 
@@ -268,19 +301,30 @@ function AddProject() {
     }
   ];
 
+  // const deleteMltSlctOptn = (key, val, ind) => {
+  //   if (key === 'projectUserId' && val && isArray(payload.projectUserId)) {
+  //     const projectUserId = payload.projectUserId.filter((uid) => uid.id !== val * 1);
+  //     const projectUserIds = projectUserId.map((v) => v.id);
+  //     updatePayload({ projectUserId, projectUserIds });
+  //   }
+  // };
+
   const handleChangeData = (key, val, ind) => {
     if (key) {
       const updateFields = { [key]: val };
-      // if (key === 'clientName') {
-      //   updateFields.clientName = parseInt(val, 10);
-      // } else if (key === 'projectHead') {
-      //   updateFields.projectHead = parseInt(val, 10);
-      // } else if (key === 'projectManager') {
-      //   updateFields.projectManager = parseInt(val, 10);
-      // } else if (key === 'projectUsers') {
-      //   updateFields.projectUsers = parseInt(val, 10);
-      // } else {
-      //   updateFields[key] = val;
+      // if (key === 'projectUserId') {
+      //   let updatedVal = val;
+      //   if (isArray(updatedVal)) {
+      //     if (isArray(payload.projectUserIds)) {
+      //       payload.projectUserIds.forEach((itm) => {
+      //         if (updatedVal.filter((ele) => ele.id === itm).length === 2) {
+      //           updatedVal = updatedVal.filter((num) => num.id !== itm);
+      //         }
+      //       });
+      //     }
+      //   }
+      //   updateFields.projectUserId = val;
+      //   updateFields.projectUserIds = val.map((v) => v.id);
       // }
       updatePayload({ ...updateFields });
     }
@@ -301,7 +345,11 @@ function AddProject() {
     const res = isUpdate ? updateProjectData(id, data) : addProjectData(data);
     if (res) {
       console.log('ProjectDataSave', res?.data);
-      alert('Project added Successfully.');
+      if (isUpdate) {
+        alert('Project updated Successfully.');
+      } else {
+        alert('Project addded Successfully.');
+      }
       setIsUpdate(false);
       updatePayload(emptyPayload);
     }
@@ -317,6 +365,7 @@ function AddProject() {
           display: 'flex',
           justifyContent: 'flex-start',
           alignItems: 'center',
+          marginTop: '1rem',
           borderBottom: '1px solid #e9e9e9'
         }}
       >
@@ -325,7 +374,7 @@ function AddProject() {
         ))}
       </Grid>
       <Grid item xs={12} style={{ height: '32rem', overflowY: 'scroll' }}>
-        <Box style={{ padding: '1.5rem', backgroundColor: 'white' }}>
+        <Box style={{ padding: '1.5rem', backgroundColor: 'white', height: '100%' }}>
           <Grid container spacing={1}>
             <Grid item xs={12} style={{ paddingLeft: '0.8rem' }}>
               <RenderComponents
@@ -337,13 +386,8 @@ function AddProject() {
                 }}
               />
             </Grid>
-            <Grid item xs={12} style={{ display: 'flex' }}>
-              <Grid item xs={4} style={{ paddingLeft: '1.5rem' }}>
-                {projectLabels?.map((comp, ind) => (
-                  <RenderComponents key={ind} metaData={comp} ind={ind} />
-                ))}
-              </Grid>
-              <Grid item xs={8}>
+            <Grid item xs={12}>
+              <Grid container xs={12} style={{ paddingLeft: '1.5rem' }}>
                 {projectInputs?.map((comp, ind) => (
                   <RenderComponents
                     key={ind}

@@ -25,3 +25,25 @@ export const API_RESPONSE_CODES = {
   INTERNAL_SERVER_ERROR: 500,
   PAYLOAD_ERROR: 502
 };
+
+export const STATUS = {
+  SUCCESS: 'success',
+  FAILED: 'error',
+  WARNING: 'warning',
+  ERROR: 'error',
+  INFO: 'info'
+};
+
+export const clientsData = [
+  {
+    clientId: 1,
+    clientName: 'Dharmesh niwant',
+    firstName: 'Dharmesh',
+    lastName: 'Niwant',
+    currencyId: 2,
+    billingMethodId: 2,
+    mobile: '87654321',
+    phone: '12345678',
+    fax: 'Faxnum123'
+  }
+];

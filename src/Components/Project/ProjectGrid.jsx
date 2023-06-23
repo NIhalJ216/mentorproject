@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,16 +8,22 @@ import AddIcon from '@mui/icons-material/Add';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import { COMPONENTS } from '../../Utils/Constants';
 import { ROUTES } from '../../Routes/Paths';
+import { isArray } from '../../Utils/Utils';
 import MuiTable from '../MuiTable/MuiTable';
 import RenderComponents from '../RenderComponents/RenderComponents';
 import { getProjectData, deleteProjectData } from '../../Services/projectServices';
+import { IS_DATA_LOADING, PROJECT_NAMES } from '../../Redux/Constants';
 import './ProjectGrid.scss';
 
 function ProjectGrid() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const masterData = useSelector((state) => state.MasterDataReducer);
   const [projectData, setProjectData] = useState([]);
   const { ADD_PROJECT } = ROUTES;
   const { SELECT_BOX, BUTTON, ICON } = COMPONENTS;
+
+  const handleActionDispatch = (type, data = []) => dispatch({ type, data });
 
   const topComponents = [
     {
@@ -26,7 +33,7 @@ function ProjectGrid() {
       groupStyle: { paddingBottom: '0.5rem', marginBottom: '1rem' },
       key: 'projects',
       label: 'Projects',
-      options: [],
+      options: masterData?.projectNameData,
       isSelecteAllAllow: false,
       columnWidth: 2
     },
@@ -69,6 +76,7 @@ function ProjectGrid() {
             metaData={{
               control: ICON,
               iconName: <AddTaskIcon />,
+              color: 'primary',
               tooltipTitle: 'status'
               // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
               // handleClickIcon: () => handleEdit(params.id)
@@ -88,6 +96,7 @@ function ProjectGrid() {
             metaData={{
               control: ICON,
               iconName: <EditIcon />,
+              color: 'primary',
               tooltipTitle: 'Update',
               // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
               handleClickIcon: () => handleEdit(params.id)
@@ -106,6 +115,7 @@ function ProjectGrid() {
             metaData={{
               control: ICON,
               iconName: <DeleteIcon />,
+              color: 'error',
               tooltipTitle: 'Delete',
               // groupStyle: { paddingTop: '0rem', marginLeft: '0.6rem' },
               handleClickIcon: () => handleDelete(params.id)
@@ -117,14 +127,11 @@ function ProjectGrid() {
   ];
 
   const handleEdit = (data) => {
-    console.log('EDIT', data);
     const tableData = projectData.find((itm) => itm.projectId === data);
-    console.log('tableData', tableData);
     navigate(ADD_PROJECT, { state: tableData });
   };
 
   const handleDelete = async (data) => {
-    console.log('DELETE', data);
     const res = await deleteProjectData(data);
     if (res?.data.isSuccessful) {
       const tableData = projectData.filter((itm) => itm.projectId !== data);
@@ -139,13 +146,20 @@ function ProjectGrid() {
   };
 
   const getProjectListData = async () => {
+    handleActionDispatch(IS_DATA_LOADING, true);
     const res = await getProjectData();
-    console.log('RESPONCE', res?.data);
     if (res.data.isSuccessful) {
       setProjectData(res.data.data);
     }
+    handleActionDispatch(IS_DATA_LOADING, false);
   };
-  console.log('projectData', projectData);
+
+  useEffect(() => {
+    if (isArray(projectData)) {
+      const projectNames = projectData.map((itm) => ({ id: itm.projectId, name: itm.projectName }));
+      handleActionDispatch(PROJECT_NAMES, projectNames || []);
+    }
+  }, [projectData]);
 
   useEffect(() => {
     getProjectListData();
